@@ -1,0 +1,29 @@
+
+.table-container {
+  margin-top: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+.total-amount {
+  font-weight: bold;
+  text-align: right;
+  margin-top: 10px;
+}
+.btn{
+  background-color: #4d5c6b;
+  color: white;
+}
+.btn:hover{
+  background-color: #3b4954;
+}
