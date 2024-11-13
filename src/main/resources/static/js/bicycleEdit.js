@@ -1,19 +1,31 @@
 const urlParams = new URLSearchParams(window.location.search);
 const bicycleId = urlParams.get("bicycleId");
-$(document).ready(function () {
-  function loadBicycle() {
-    $.ajax({
-      url: "/admin/api/bicycle/" + bicycleId,
-      method: "GET",
-      success: function (data) {
-        $('input[name="bicycleName"]').val(data.bicycleName);
+let bicycleLatitude, bicycleLongitude;
 
-        // Set the radio buttons based on bicycleStatus
-        if (data.bicycleStatus === '1') {
-          $('input[name="bicycleStatus"][value="1"]').prop('checked', true);
-        } else {
-          $('input[name="bicycleStatus"][value="0"]').prop('checked', true);
-        }
+$(document).ready(function () {
+
+  function loadBranch() {
+    $.ajax({
+      url: "/admin/api/allBranch",
+      method: "GET",
+      success: function (branches) {
+        const branchSelect = $('<select id="branchSelect"></select>');
+
+        // Iterate over each branch to create an option element
+        branches.forEach(branch => {
+          const option = $('<option></option>')
+          .val(branch.branchId)
+          .text(branch.branchName);
+
+          // Check if branch coordinates match bicycle coordinates
+          if (branch.latitude === bicycleLatitude && branch.longitude === bicycleLongitude) {
+            option.prop("selected", true);  // Set the option as selected if coordinates match
+          }
+
+          branchSelect.append(option);
+        });
+
+        $("#branchSelectContainer").append(branchSelect);
       },
       error: function () {
         alert("Failed to fetch branch data.");
@@ -21,34 +33,68 @@ $(document).ready(function () {
     });
   }
 
+  // Load bicycle details and set up initial form state
+  function loadBicycle() {
+    $.ajax({
+      url: "/admin/api/bicycle/" + bicycleId,
+      method: "GET",
+      success: function (data) {
+        $('input[name="bicycleName"]').val(data.bicycleName);
+        bicycleLatitude = data.latitude;
+        bicycleLongitude = data.longitude;
+
+        if (data.bicycleStatus === '1') {
+          $('input[name="bicycleStatus"][value="1"]').prop('checked', true);
+        } else {
+          $('input[name="bicycleStatus"][value="0"]').prop('checked', true);
+        }
+
+        loadBranch();  // Load branches after we get the bicycle data
+      },
+      error: function () {
+        alert("Failed to fetch bicycle data.");
+      }
+    });
+  }
+
   loadBicycle();
+
+  // Handle form submission
   $("#submitBtn").on("click", function (e) {
     e.preventDefault();
-    var bicycleName = $("input[name='bicycleName']").val().trim();
-    var bicycleStatus = $("input[name='bicycleStatus']:checked").val();
+    const bicycleName = $("input[name='bicycleName']").val().trim();
+    const bicycleStatus = $("input[name='bicycleStatus']:checked").val();
+    const selectedBranchId = $("#branchSelect").val();
+
     if (!bicycleName) {
       alert("모든 정보를 입력해주세요.");
       return;
     }
-    // Ajax 요청을 통해 중복 체크 및 추가
+
     $.ajax({
       type: "POST",
       url: "/admin/api/bicycle/update",
       data: {
         bicycleId: bicycleId,
         bicycleName: bicycleName,
-        bicycleStatus: bicycleStatus
+        bicycleStatus: bicycleStatus,
+        branchId: selectedBranchId
       },
       success: function (response) {
-        if (response == 'SUCCESS') {
           window.location.href = "/admin/bicycle/main";
-        } else if (response == 'EXIST_NAME') {
-          alert("이미 존재하는 자전거 이름 입니다.")
-        }
       },
       error: function (xhr, status, error) {
-        alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+        if (xhr.status === 400) {
+          if (xhr.responseText === "EXIST_NAME") {
+            alert("해당 자전거 이름이 이미 존재합니다.");
+          }
+        } else {
+          alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+        }
       }
     });
+  });
+  $("#return").on('click', function (){
+    window.location.href = "/admin/bicycle/main";
   });
 });

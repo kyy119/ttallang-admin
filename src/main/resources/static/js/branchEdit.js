@@ -52,16 +52,20 @@ $(document).ready(function () {
         branchStatus: branchStatus
       },
       success: function (response) {
-        if (response == 'SUCCESS') {
-          window.location.href = "/admin/branch/main";
-        } else if (response == 'EXIST_NAME') {
-          alert("이미 존재하는 대여소 이름 입니다.")
-        } else if (response == 'EXIST_STREET') {
-          alert("이미 존재하는 주소 입니다.")
-        }
+        window.location.href = "/admin/branch/main";
       },
       error: function (xhr, status, error) {
-        alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+        if (xhr.status === 400) {
+          if (xhr.responseText === "EXIST_BRANCH") {
+            alert("해당 지점 이름이 이미 존재합니다.");
+          } else if (xhr.responseText === "EXIST_STREET") {
+            alert("해당 주소가 이미 존재합니다.");
+          } else {
+            alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+          }
+        } else {
+          alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+        }
       }
     });
   });

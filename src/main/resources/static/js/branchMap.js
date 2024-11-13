@@ -51,14 +51,16 @@ $(document).ready(function () {
         longitude: longitude
       },
       success: function (response) {
-        if (response == "SUCCESS") {
           document.location.reload();
-        } else {
-          alert("이미 존재하는 자전거 이름 입니다.");
-        }
       },
       error: function (xhr, status, error) {
-        alert("Error: " + error);
+        if (xhr.status === 400) {
+          if (xhr.responseText === "EXIST_BICYCLE") {
+            alert("해당 자전거 이름이 이미 존재합니다.");
+          }
+        } else {
+          alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+        }
       }
     });
   });

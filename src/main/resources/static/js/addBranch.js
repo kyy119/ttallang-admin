@@ -27,19 +27,20 @@ $(document).ready(function () {
         streetAdr: streetAdr
       },
       success: function (response) {
-        if (response === "EXIST_BRANCH") {
-          alert("이미 대여소 이름이 존재합니다.");
-        } else if (response === "EXIST_ADDRESS") {
-          alert("이미 도로명이 존재합니다.");
-        } else if (response === "SUCCESS") {
-          window.location.href = "/admin/branch/main";
-        }
+        window.location.href = "/admin/branch/main";
       },
       error: function (xhr, status, error) {
-        alert(xhr);
-        alert(status);
-        alert(error);
-        alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+        if (xhr.status === 400) {
+          if (xhr.responseText === "EXIST_BRANCH") {
+            alert("해당 지점 이름이 이미 존재합니다.");
+          } else if (xhr.responseText === "EXIST_STREET") {
+            alert("해당 주소가 이미 존재합니다.");
+          } else {
+            alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+          }
+        } else {
+          alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+        }
       }
     });
   });

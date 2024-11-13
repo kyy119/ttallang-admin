@@ -1,4 +1,4 @@
-package com.ttalang.admin.service;
+package com.ttalang.admin.commonModel;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

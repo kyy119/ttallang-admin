@@ -12,9 +12,9 @@
 <jsp:include page="../header/header.jsp" />
 <div class="content">
     <div class="radio-section">
-        <label><input type="radio" name="report" value="reported" checked> 신고</label>
+        <label><input type="radio" name="report" value="allBike" checked>전체 자전거</label>
+        <label><input type="radio" name="report" value="reported"> 신고</label>
         <label><input type="radio" name="report" value="notReported"> 미신고</label>
-        <label><input type="radio" name="report" value="allBike">전체 자전거</label>
     </div>
 
     <table>

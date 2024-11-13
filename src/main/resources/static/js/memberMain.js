@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  loadNoPayMemberList();
+  loadAllMemberList();
 
   // Radio button change event handler
   $('input[name="report"]').change(function () {

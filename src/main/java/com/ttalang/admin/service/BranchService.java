@@ -1,6 +1,8 @@
 package com.ttalang.admin.service;
 
 
+import com.ttalang.admin.commonModel.Bicycle;
+import com.ttalang.admin.commonModel.BranchWithBicycleCount;
 import com.ttalang.admin.kakao.KakaoApiResponse;
 import com.ttalang.admin.commonModel.Branch;
 import com.ttalang.admin.repository.BicycleRepository;
@@ -8,12 +10,13 @@ import com.ttalang.admin.repository.BranchRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -35,14 +38,16 @@ public class BranchService {
     public Branch getBranchById(int branchId) {
         return branchRepository.findById(branchId).orElse(null);
     }
-    public Branch updateBranch(Integer branchId, String branchName, String streetAdr, String branchStatus){
+
+    @Transactional
+    public ResponseEntity<?> updateBranch(Integer branchId, String branchName, String streetAdr, String branchStatus){
         boolean exists = branchRepository.existsByBranchNameAndBranchIdNot(branchName, branchId);
         if (exists) {
-            throw new DataIntegrityViolationException("EXIST_NAME");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BRANCH");
         }
         exists = branchRepository.existsByRoadAddressAndBranchIdNot(streetAdr, branchId);
         if(exists){
-            throw new DataIntegrityViolationException("EXIST_STREET");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_STREET");
         }
         Branch branch = branchRepository.findById(branchId)
             .orElseThrow(() -> new IllegalArgumentException("Branch not found"));
@@ -59,19 +64,27 @@ public class BranchService {
         double latitude = response.getBody().getDocuments().get(0).getY();
         double longitude = response.getBody().getDocuments().get(0).getX();
 
+        List<Bicycle> bicycles = bicycleRepository.findAllByLatitudeAndLongitude(branch.getLatitude(), branch.getLongitude());
+        for(int i = 0; i < bicycles.size(); i ++){
+            bicycles.get(i).setBicycleStatus(branchStatus);
+            bicycles.get(i).setLatitude(latitude);
+            bicycles.get(i).setLongitude(longitude);
+            bicycleRepository.save(bicycles.get(i));
+        }
         branch.setBranchName(branchName);
         branch.setRoadAddress(streetAdr);
         branch.setLatitude(latitude);
         branch.setLongitude(longitude);
         branch.setBranchStatus(branchStatus);
-        return branchRepository.save(branch);
+        Branch updatedBranch = branchRepository.save(branch);
+        return ResponseEntity.ok(updatedBranch);
     }
-    public Branch saveBranch(String branchName, String streetAdr) {
-        if (branchRepository.findByRoadAddress(streetAdr).isPresent()) {
-            throw new IllegalArgumentException("EXIST_ADDRESS");
-        }
+    public ResponseEntity<?> saveBranch(String branchName, String streetAdr) {
         if (branchRepository.findByBranchName(branchName).isPresent()) {
-            throw new IllegalArgumentException("EXIST_BRANCH");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BRANCH");
+        }
+        if (branchRepository.findByRoadAddress(streetAdr).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_STREET");
         }
         String apiUrl = "https://dapi.kakao.com/v2/local/search/address.json?query=" + streetAdr;
 
@@ -87,7 +100,8 @@ public class BranchService {
 
         Branch branch = new Branch(branchName, latitude, longitude, streetAdr);
         branch.setBranchStatus("1");
-        return branchRepository.save(branch);
+        Branch saveBranch = branchRepository.save(branch);
+        return ResponseEntity.ok(saveBranch);
     }
     public List<BranchWithBicycleCount> getBranchesWithBicycleCounts() {
         return branchRepository.findAll().stream().map(branch -> {
