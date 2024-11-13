@@ -1,6 +1,7 @@
 package com.ttalang.admin.repository;
 
 import com.ttalang.admin.commonModel.Branch;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,4 +13,5 @@ public interface BranchRepository extends JpaRepository<Branch,Integer> {
 
     boolean existsByBranchNameAndBranchIdNot(String branchName, Integer branchId);
     boolean existsByRoadAddressAndBranchIdNot(String streetAdr, Integer branchId);
+
 }

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  loadReportList('reported');
+  loadAllBicycle();
   // 라디오 버튼 변경 시 이벤트 핸들러
   $('input[name="report"]').change(function () {
     var status = $(this).val();

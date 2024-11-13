@@ -2,20 +2,27 @@ package com.ttalang.admin.service;
 
 
 import com.ttalang.admin.commonModel.Bicycle;
+import com.ttalang.admin.commonModel.Branch;
 import com.ttalang.admin.repository.BicycleRepository;
+import com.ttalang.admin.repository.BranchRepository;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BicycleService {
     private final BicycleRepository bicycleRepository;
-    public BicycleService(BicycleRepository bicycleRepository){
+    private final BranchRepository branchRepository;
+    public BicycleService(BicycleRepository bicycleRepository, BranchRepository branchRepository){
         this.bicycleRepository = bicycleRepository;
+        this.branchRepository = branchRepository;
     }
-    public Bicycle save(String bicycleName, double latitude, double longitude){
+    public ResponseEntity<?> save(String bicycleName, double latitude, double longitude){
         if(bicycleRepository.findByBicycleName(bicycleName).isPresent()){
-            throw new IllegalArgumentException("EXIST_BICYCLE");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BICYCLE");
         }
         Bicycle bicycle = new Bicycle();
         bicycle.setBicycleName(bicycleName);
@@ -24,7 +31,8 @@ public class BicycleService {
         bicycle.setRentalStatus("1");
         bicycle.setBicycleStatus("1");
         bicycle.setReportStatus("1");
-        return bicycleRepository.save(bicycle);
+        bicycle = bicycleRepository.save(bicycle);
+        return ResponseEntity.ok(bicycle);
     }
     public List<Bicycle> getBicyclesByLocation(double latitude, double longitude){
         return bicycleRepository.findByLocation(latitude, longitude);
@@ -38,15 +46,19 @@ public class BicycleService {
         System.out.println(reportStatus);
         return bicycleRepository.findAllByReportStatus(reportStatus);
     }
-    public Bicycle updateBicycle(Integer bicycleId, String bicycleName, String bicycleStatus){
+    public ResponseEntity<?> updateBicycle(Integer bicycleId, String bicycleName, String bicycleStatus, int branchId){
         boolean exist = bicycleRepository.existsByBicycleNameAndBicycleIdNot(bicycleName, bicycleId);
         if(exist){
-            throw new DataIntegrityViolationException("EXIST_NAME");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_NAME");
         }
         Bicycle bicycle = bicycleRepository.findByBicycleId(bicycleId);
+        Branch branch = branchRepository.findById(branchId).orElse(null);
         bicycle.setBicycleName(bicycleName);
         bicycle.setBicycleStatus(bicycleStatus);
-        return bicycleRepository.save(bicycle);
+        bicycle.setLatitude(branch.getLatitude());
+        bicycle.setLongitude(branch.getLongitude());
+        bicycle = bicycleRepository.save(bicycle);
+        return ResponseEntity.ok(bicycle);
     }
     public Bicycle getBicycleById(int bicycleId){
         return bicycleRepository.findByBicycleId(bicycleId);

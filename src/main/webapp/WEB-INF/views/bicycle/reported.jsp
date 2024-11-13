@@ -13,7 +13,7 @@
     <div class="report-header"></div>
     <div class="report-date"></div>
     <div class="report-content"></div>
-    <button class="submit-button" id="submitBtn">접수 완료</button>
+    <button class="submit-button" id="submitBtn">처리 완료</button>
 </div>
 </body>
 </html>

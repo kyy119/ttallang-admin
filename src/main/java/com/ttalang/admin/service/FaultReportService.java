@@ -25,6 +25,7 @@ public class FaultReportService {
         faultReport.setReportStatus("1");
         Bicycle bicycle = bicycleRepository.findByBicycleId(bicycleId);
         bicycle.setBicycleStatus("1");
+        bicycle.setReportStatus("1");
         return faultReport;
     }
 }

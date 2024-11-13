@@ -11,12 +11,14 @@
 <div id="form-container">
     <img src="/images/markerStar.png" alt="Location Icon" width="50" height="50">
     <h3>자전거 수정</h3>
+    <div id="branchSelectContainer"></div>
     <form id="branchForm">
         <input type="text" name="bicycleName" placeholder="자전거 이름">
         <label><input type="radio" name="bicycleStatus" value="1">활성화</label>
         <label><input type="radio" name="bicycleStatus" value="0">비활성화</label>
         <button type="submit" id="submitBtn">수정</button>
     </form>
+    <button id="return">취소</button>
 </div>
 </body>
 </html>

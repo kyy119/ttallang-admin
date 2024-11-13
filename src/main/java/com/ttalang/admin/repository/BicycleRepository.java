@@ -22,5 +22,7 @@ public interface BicycleRepository extends JpaRepository<Bicycle, Integer> {
 
     Optional<Bicycle> findByBicycleName(String bicycleName);
 
-    boolean existsByBicycleNameAndBicycleIdNot(String bicycleName, Integer bicycleId);
+    boolean existsByBicycleNameAndBicycleIdNot(String bicycleName, int bicycleId);
+
+    List<Bicycle> findAllByLatitudeAndLongitude(double latitude, double longitude);
 }

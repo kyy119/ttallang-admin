@@ -19,8 +19,8 @@
     </div>
 
     <div class="radio-container">
-        <label><input type="radio" name="report" value="allMember"> 전체 회원</label>
-        <label><input type="radio" name="report" value="noPayMember" checked> 미납 회원</label>
+        <label><input type="radio" name="report" value="allMember" checked> 전체 회원</label>
+        <label><input type="radio" name="report" value="noPayMember"> 미납 회원</label>
     </div>
 
     <div class="table-container">
