@@ -51,7 +51,7 @@ $(document).ready(function () {
         longitude: longitude
       },
       success: function (response) {
-          document.location.reload();
+        document.location.reload();
       },
       error: function (xhr, status, error) {
         if (xhr.status === 400) {

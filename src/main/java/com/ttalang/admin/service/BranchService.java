@@ -21,9 +21,10 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class BranchService {
+
     private final BranchRepository branchRepository;
     private final BicycleRepository bicycleRepository;
-//    private final String KAKAO_API_KEY = "dfd8dd36973eaa0d87e791379b3c28f2";
+    //    private final String KAKAO_API_KEY = "dfd8dd36973eaa0d87e791379b3c28f2";
     @Value("${KAKAO_API_KEY}")
     private String KAKAO_API_KEY;
 
@@ -35,18 +36,20 @@ public class BranchService {
     public List<Branch> getAllBranches() {
         return branchRepository.findAll();
     }
+
     public Branch getBranchById(int branchId) {
         return branchRepository.findById(branchId).orElse(null);
     }
 
     @Transactional
-    public ResponseEntity<?> updateBranch(Integer branchId, String branchName, String streetAdr, String branchStatus){
+    public ResponseEntity<?> updateBranch(Integer branchId, String branchName, String streetAdr,
+        String branchStatus) {
         boolean exists = branchRepository.existsByBranchNameAndBranchIdNot(branchName, branchId);
         if (exists) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BRANCH");
         }
         exists = branchRepository.existsByRoadAddressAndBranchIdNot(streetAdr, branchId);
-        if(exists){
+        if (exists) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_STREET");
         }
         Branch branch = branchRepository.findById(branchId)
@@ -59,13 +62,15 @@ public class BranchService {
         headers.set("Authorization", "KakaoAK " + KAKAO_API_KEY);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<KakaoApiResponse> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, KakaoApiResponse.class);
+        ResponseEntity<KakaoApiResponse> response = restTemplate.exchange(apiUrl, HttpMethod.GET,
+            entity, KakaoApiResponse.class);
 
         double latitude = response.getBody().getDocuments().get(0).getY();
         double longitude = response.getBody().getDocuments().get(0).getX();
 
-        List<Bicycle> bicycles = bicycleRepository.findAllByLatitudeAndLongitude(branch.getLatitude(), branch.getLongitude());
-        for(int i = 0; i < bicycles.size(); i ++){
+        List<Bicycle> bicycles = bicycleRepository.findAllByLatitudeAndLongitude(
+            branch.getLatitude(), branch.getLongitude());
+        for (int i = 0; i < bicycles.size(); i++) {
             bicycles.get(i).setBicycleStatus(branchStatus);
             bicycles.get(i).setLatitude(latitude);
             bicycles.get(i).setLongitude(longitude);
@@ -79,6 +84,7 @@ public class BranchService {
         Branch updatedBranch = branchRepository.save(branch);
         return ResponseEntity.ok(updatedBranch);
     }
+
     public ResponseEntity<?> saveBranch(String branchName, String streetAdr) {
         if (branchRepository.findByBranchName(branchName).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BRANCH");
@@ -93,7 +99,8 @@ public class BranchService {
         headers.set("Authorization", "KakaoAK " + KAKAO_API_KEY);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<KakaoApiResponse> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, KakaoApiResponse.class);
+        ResponseEntity<KakaoApiResponse> response = restTemplate.exchange(apiUrl, HttpMethod.GET,
+            entity, KakaoApiResponse.class);
 
         double latitude = response.getBody().getDocuments().get(0).getY();
         double longitude = response.getBody().getDocuments().get(0).getX();
@@ -103,10 +110,13 @@ public class BranchService {
         Branch saveBranch = branchRepository.save(branch);
         return ResponseEntity.ok(saveBranch);
     }
+
     public List<BranchWithBicycleCount> getBranchesWithBicycleCounts() {
         return branchRepository.findAll().stream().map(branch -> {
-            int bicycleCount = bicycleRepository.countByLocation(branch.getLatitude(), branch.getLongitude());
-            return new BranchWithBicycleCount(branch.getBranchId(),branch.getBranchStatus(),branch.getBranchName(), bicycleCount);
+            int bicycleCount = bicycleRepository.countByLocation(branch.getLatitude(),
+                branch.getLongitude());
+            return new BranchWithBicycleCount(branch.getBranchId(), branch.getBranchStatus(),
+                branch.getBranchName(), bicycleCount);
         }).collect(Collectors.toList());
     }
 

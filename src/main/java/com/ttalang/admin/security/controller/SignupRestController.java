@@ -30,7 +30,7 @@ public class SignupRestController {
             securityResponse.setCode(500);
             securityResponse.setStatus("failure");
             securityResponse.setRole("guest");
-            securityResponse.setMessage("회원가입 실패,"+e.getMessage());
+            securityResponse.setMessage("회원가입 실패," + e.getMessage());
             System.out.println("예외 발생: " + e.getMessage());
         }
         return securityResponse;

@@ -34,8 +34,12 @@ public class SecurityConfig {
         ).formLogin(form -> form
             .loginPage("/login/form") // 로그인 페이지.
             .loginProcessingUrl("/api/login") // 로그인 처리할 url.
-            .successHandler((request, response, authentication) -> new LoginHandler().onAuthenticationSuccess(request, response, authentication))
-            .failureHandler((request, response, authentication) -> new LoginHandler().onAuthenticationFailure(request, response, authentication))
+            .successHandler(
+                (request, response, authentication) -> new LoginHandler().onAuthenticationSuccess(
+                    request, response, authentication))
+            .failureHandler(
+                (request, response, authentication) -> new LoginHandler().onAuthenticationFailure(
+                    request, response, authentication))
             .permitAll()
         ).securityContext(securityContext -> securityContext
             .requireExplicitSave(false) // 필요한 경우에만 SecurityContext를 세션에 저장.

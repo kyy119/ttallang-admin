@@ -10,11 +10,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BicycleRepository extends JpaRepository<Bicycle, Integer> {
+
     @Query("SELECT COUNT(b) FROM Bicycle b WHERE b.latitude = :latitude AND b.longitude = :longitude")
     int countByLocation(@Param("latitude") double latitude, @Param("longitude") double longitude);
 
     @Query("SELECT b FROM Bicycle b WHERE b.latitude = :latitude AND b.longitude = :longitude")
-    List<Bicycle> findByLocation(@Param("latitude") double latitude, @Param("longitude") double longitude);
+    List<Bicycle> findByLocation(@Param("latitude") double latitude,
+        @Param("longitude") double longitude);
 
     List<Bicycle> findAllByReportStatus(String status);
 

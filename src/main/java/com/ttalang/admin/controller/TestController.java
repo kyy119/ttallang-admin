@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/test")
 public class TestController {
+
     @GetMapping("/searchTest")
-    public String searchTest(){
+    public String searchTest() {
         return "test/search";
     }
+
     @GetMapping("/kakaomap")
-    public String kakakoMap(){
+    public String kakakoMap() {
         return "test/map";
     }
 }

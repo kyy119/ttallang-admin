@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService {
+
     private PaymentRepository paymentRepository;
 
-    public PaymentService(PaymentRepository paymentRepository){
+    public PaymentService(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
     }
-    public List<Payment> findByPaymentDateBetween(LocalDateTime start, LocalDateTime end){
+
+    public List<Payment> findByPaymentDateBetween(LocalDateTime start, LocalDateTime end) {
         return paymentRepository.findByPaymentDateBetween(start, end);
     }
 }

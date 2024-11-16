@@ -60,7 +60,8 @@ public class AdminRestController {
     }
 
     @PostMapping("/branches/add")
-    public ResponseEntity<?> createBranch(@RequestParam String branchName, @RequestParam String streetAdr) {
+    public ResponseEntity<?> createBranch(@RequestParam String branchName,
+        @RequestParam String streetAdr) {
         return branchService.saveBranch(branchName, streetAdr);
     }
 
@@ -74,7 +75,8 @@ public class AdminRestController {
     }
 
     @PostMapping("/bicycle/add")
-    public ResponseEntity<?> bicycleAdd(@RequestParam String bicycleName, @RequestParam double latitude,
+    public ResponseEntity<?> bicycleAdd(@RequestParam String bicycleName,
+        @RequestParam double latitude,
         @RequestParam double longitude) {
         return bicycleService.save(bicycleName, latitude, longitude);
     }
@@ -102,7 +104,8 @@ public class AdminRestController {
     }
 
     @PostMapping("/bicycle/update")
-    public ResponseEntity<?> updateBicycle(@RequestParam Integer bicycleId, @RequestParam String bicycleName,
+    public ResponseEntity<?> updateBicycle(@RequestParam Integer bicycleId,
+        @RequestParam String bicycleName,
         @RequestParam String bicycleStatus, @RequestParam int branchId) {
         return bicycleService.updateBicycle(bicycleId, bicycleName, bicycleStatus, branchId);
     }

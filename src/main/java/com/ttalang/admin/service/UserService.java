@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository){
+
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    public List<UserRolesDTO> findAllUserDetails(){
+
+    public List<UserRolesDTO> findAllUserDetails() {
         return userRepository.findAllUserDetails();
     }
-    public List<Object[]> findUnpaidPayments(){
+
+    public List<Object[]> findUnpaidPayments() {
         return userRepository.findUnpaidPayments();
     }
 }

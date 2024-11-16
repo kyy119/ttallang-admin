@@ -10,9 +10,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    @Query("SELECT new com.ttalang.admin.commonModel.UserRolesDTO(r.userName, u.customerName, u.customerPhone, u.birthday, u.email) " +
-        "FROM User u JOIN Roles r ON u.userId = r.userId")
+    @Query(
+        "SELECT new com.ttalang.admin.commonModel.UserRolesDTO(r.userName, u.customerName, u.customerPhone, u.birthday, u.email) "
+            +
+            "FROM User u JOIN Roles r ON u.userId = r.userId")
     List<UserRolesDTO> findAllUserDetails();
+
     @Query("SELECT r.userName,u.customerName ,p.paymentAmount " +
         "FROM Payment p " +
         "JOIN User u ON p.customerId = u.customerId " +
