@@ -10,6 +10,6 @@
 </head>
 <body>
 <jsp:include page="../header/header.jsp" />
-<div id="map" style="height: 500px; width: 100%;"></div><br>
+<div id="map" style="height: 750px; width: 100%;"></div><br>
 </body>
 </html>

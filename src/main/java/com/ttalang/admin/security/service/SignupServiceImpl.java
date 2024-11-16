@@ -26,8 +26,8 @@ public class SignupServiceImpl implements SignupService {
     private final RolesRepository rolesRepository;
 
     public SignupServiceImpl(
-            BCryptPasswordEncoder bCryptPasswordEncoder,
-            RolesRepository rolesRepository
+        BCryptPasswordEncoder bCryptPasswordEncoder,
+        RolesRepository rolesRepository
     ) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.rolesRepository = rolesRepository;

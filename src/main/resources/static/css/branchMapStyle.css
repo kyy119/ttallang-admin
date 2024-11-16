@@ -1,12 +1,14 @@
 body {
-  display: flex;
-  flex-direction: row;
+  font-family: Arial, sans-serif;
   margin: 0;
+  padding: 0;
 }
+
 #map {
   width: 70%;
   height: 700px;
 }
+
 #sidePanel {
   width: 30%;
   padding: 20px;
@@ -14,16 +16,19 @@ body {
   border-left: 1px solid #ddd;
   box-sizing: border-box;
 }
+
 #bicycleList {
   list-style: none;
   padding: 0;
 }
+
 #bicycleList li {
   margin: 10px 0;
   padding: 10px;
   background-color: #e0e0e0;
   border-radius: 5px;
 }
+
 #submitBtn {
   display: block;
   margin-top: 20px;
@@ -34,20 +39,9 @@ body {
   border-radius: 5px;
   cursor: pointer;
 }
-/* Header 스타일을 고정 */
-#header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
-}
+
 /* 본문 내용이 헤더에 의해 가려지지 않도록 여백 추가 */
 .content {
-  padding-top: 80px; /* 헤더 높이만큼 */
   display: flex;
   flex: 1;
 }

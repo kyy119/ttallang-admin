@@ -10,17 +10,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FaultReportService {
+
     private final FaultReportRepository faultReportRepository;
     private final BicycleRepository bicycleRepository;
-    public FaultReportService(FaultReportRepository faultReportRepository, BicycleRepository bicycleRepository){
+
+    public FaultReportService(FaultReportRepository faultReportRepository,
+        BicycleRepository bicycleRepository) {
         this.faultReportRepository = faultReportRepository;
         this.bicycleRepository = bicycleRepository;
     }
-    public ReportSummaryDTO findReportedBicycles(int bicycleId){
+
+    public ReportSummaryDTO findReportedBicycles(int bicycleId) {
         return faultReportRepository.findReportedBicycles(bicycleId);
     }
+
     @Transactional
-    public FaultReport updateReport(Integer bicycleId,  Integer reportId){
+    public FaultReport updateReport(Integer bicycleId, Integer reportId) {
         FaultReport faultReport = faultReportRepository.findByReportId(reportId);
         faultReport.setReportStatus("1");
         Bicycle bicycle = bicycleRepository.findByBicycleId(bicycleId);

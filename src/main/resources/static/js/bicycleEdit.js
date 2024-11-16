@@ -18,7 +18,8 @@ $(document).ready(function () {
           .text(branch.branchName);
 
           // Check if branch coordinates match bicycle coordinates
-          if (branch.latitude === bicycleLatitude && branch.longitude === bicycleLongitude) {
+          if (branch.latitude === bicycleLatitude && branch.longitude
+              === bicycleLongitude) {
             option.prop("selected", true);  // Set the option as selected if coordinates match
           }
 
@@ -81,7 +82,7 @@ $(document).ready(function () {
         branchId: selectedBranchId
       },
       success: function (response) {
-          window.location.href = "/admin/bicycle/main";
+        window.location.href = "/admin/bicycle/main";
       },
       error: function (xhr, status, error) {
         if (xhr.status === 400) {
@@ -94,7 +95,7 @@ $(document).ready(function () {
       }
     });
   });
-  $("#return").on('click', function (){
+  $("#return").on('click', function () {
     window.location.href = "/admin/bicycle/main";
   });
 });

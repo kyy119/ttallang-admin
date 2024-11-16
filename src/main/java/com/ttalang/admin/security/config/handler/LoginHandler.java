@@ -12,22 +12,25 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import java.io.IOException;
 
 public class LoginHandler implements AuthenticationSuccessHandler, AuthenticationFailureHandler {
+
     @Override
     public void onAuthenticationSuccess(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Authentication authentication
     ) throws IOException {
         String role = authentication.getAuthorities().iterator().next().getAuthority();
         if (role.equals("ROLE_ADMIN")) {
             response.setContentType("application/json;charset=UTF-8");
-            SecurityResponse securityResponse = new SecurityResponse(200, "success","admin", "관리자 로그인 성공.");
+            SecurityResponse securityResponse = new SecurityResponse(200, "success", "admin",
+                "관리자 로그인 성공.");
 
             new ObjectMapper().writeValue(response.getWriter(), securityResponse);
         } else { // 관리자 로그인이 되었지만 올바른 관리자 권한(ROLE_ADMIN)을 찾을 수 없으므로 401 처리.
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json;charset=UTF-8");
-            SecurityResponse securityResponse = new SecurityResponse(401, "failure", "unknown", "권한 정보가 잘못되었습니다.");
+            SecurityResponse securityResponse = new SecurityResponse(401, "failure", "unknown",
+                "권한 정보가 잘못되었습니다.");
 
             new ObjectMapper().writeValue(response.getWriter(), securityResponse);
         }
@@ -35,9 +38,9 @@ public class LoginHandler implements AuthenticationSuccessHandler, Authenticatio
 
     @Override
     public void onAuthenticationFailure(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException exception
+        HttpServletRequest request,
+        HttpServletResponse response,
+        AuthenticationException exception
     ) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
