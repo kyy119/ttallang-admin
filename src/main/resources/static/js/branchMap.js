@@ -41,7 +41,12 @@ $(document).ready(function () {
 
   $("#submitBtn").on("click", function (e) {
     e.preventDefault();
-    var bicycleName = $("input[name='bicycleName']").val();
+    var bicycleName = $("input[name='bicycleName']").val().trim();
+    if(!bicycleName){
+      alert("모든 정보를 입력하세요.");
+      return;
+    }
+    bicycleName = bicycleName.replaceAll(" ","");
     $.ajax({
       type: "POST",
       url: "/admin/api/bicycle/add",

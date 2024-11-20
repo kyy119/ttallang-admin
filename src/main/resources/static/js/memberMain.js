@@ -65,7 +65,7 @@ $(document).ready(function () {
       data.forEach(function (item) {
         $('#reportTable tbody').append(
             "<tr><td>" + item.userName + "</td><td>" + item.customerName
-            + "</td><td>" + item.customerPhone + "</td><td>" + item.birthday
+            + "</td><td>" + formatPhoneNumber(item.customerPhone) + "</td><td>" + formatDate(item.birthday)
             + "</td><td>" + item.email + "</td></tr>");
       });
     } else {
@@ -78,9 +78,18 @@ $(document).ready(function () {
                     `);
       data.forEach(function (item) {
         $('#reportTable tbody').append(
-            "<tr><td>" + item[0] + "</td><td>" + item[1] + "</td><td>" + item[2]
+            "<tr><td>" + item[0] + "</td><td>" + item[1] + "</td><td>" + formatCurrency(item[2]) + "원"
             + "</td></tr>");
       });
     }
+  }
+  function formatCurrency(amount) {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  function formatDate(dateString) {
+    return dateString.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+  }
+  function formatPhoneNumber(phoneNumber) {
+    return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
   }
 });

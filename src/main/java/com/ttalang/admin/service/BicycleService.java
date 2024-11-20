@@ -60,6 +60,12 @@ public class BicycleService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_NAME");
         }
         Bicycle bicycle = bicycleRepository.findByBicycleId(bicycleId);
+        if(bicycle.getRentalStatus().equals("0")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("RENTING");
+        }
+        if(bicycle.getReportStatus().equals("0")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("REPORT");
+        }
         Branch branch = branchRepository.findById(branchId).orElse(null);
         bicycle.setBicycleName(bicycleName);
         bicycle.setBicycleStatus(bicycleStatus);
