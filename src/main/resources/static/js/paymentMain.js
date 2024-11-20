@@ -52,15 +52,18 @@ $(document).ready(function () {
         payList.empty();
         let totalAmount = 0;
         response.forEach(function (payment) {
-          payList.append("<tr><td>" + payment.paymentDate + "</td><td>"
-              + payment.paymentAmount + "원</td></tr>");
+          payList.append("<tr><td>" + payment.paymentDate.replace("T", " ") + "</td><td>"
+              + formatCurrency(payment.paymentAmount) + "원</td></tr>");
           totalAmount += payment.paymentAmount;
         });
-        $('#totalAmount').text("총액: " + totalAmount + " 원");
+        $('#totalAmount').text("총액: " + formatCurrency(totalAmount) + " 원");
       },
       error: function (err) {
         console.error("Error fetching payment data:", err);
       }
     });
+    function formatCurrency(amount) {
+      return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
   };
 });
