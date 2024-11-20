@@ -47,6 +47,11 @@ $(document).ready(function () {
       return;
     }
     bicycleName = bicycleName.replaceAll(" ","");
+    var validRegex = /^[a-z0-9\-]+$/;
+    if (!validRegex.test(bicycleName)) {
+      alert("자전거 이름은 영어 소문자, 숫자, 하이픈(-)만 입력 가능합니다.");
+      return;
+    }
     $.ajax({
       type: "POST",
       url: "/admin/api/bicycle/add",
