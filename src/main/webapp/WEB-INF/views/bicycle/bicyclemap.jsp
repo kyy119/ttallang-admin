@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bicycleMapStyle.css">
     <script src="${pageContext.request.contextPath}/js/bicycleMap.js"></script>
     <!-- Kakao Maps API -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1bfc76317e78b81b1a32b1be44269182"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=40dcc4dae6de01cd9ed29123fcc4d775"></script>
 </head>
 <body>
 <jsp:include page="../header/header.jsp" />
