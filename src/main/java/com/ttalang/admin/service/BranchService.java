@@ -44,11 +44,15 @@ public class BranchService {
     @Transactional
     public ResponseEntity<?> updateBranch(Integer branchId, String branchName, String streetAdr,
         String branchStatus) {
-        boolean exists = branchRepository.existsByBranchNameAndBranchIdNot(branchName, branchId);
-        if (exists) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BRANCH");
+        List<String> branchList = branchRepository.findBranchNamesExcludingId(branchId);
+        String compareBranchName = branchName.replaceAll(" ","");
+        for(String str : branchList){
+            str = str.replaceAll(" ","");
+            if(compareBranchName.equals(str)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BRANCH");
+            }
         }
-        exists = branchRepository.existsByRoadAddressAndBranchIdNot(streetAdr, branchId);
+        boolean exists = branchRepository.existsByRoadAddressAndBranchIdNot(streetAdr, branchId);
         if (exists) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_STREET");
         }
@@ -86,8 +90,13 @@ public class BranchService {
     }
 
     public ResponseEntity<?> saveBranch(String branchName, String streetAdr) {
-        if (branchRepository.findByBranchName(branchName).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BRANCH");
+        String compareBranchName = branchName.replaceAll(" ","");
+        List<String> branchNames = branchRepository.findAllBranchNames();
+        for(String str : branchNames){
+            str = str.replaceAll(" ","");
+            if(compareBranchName.equals(str)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_BRANCH");
+            }
         }
         if (branchRepository.findByRoadAddress(streetAdr).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("EXIST_STREET");

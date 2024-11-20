@@ -88,8 +88,12 @@ $(document).ready(function () {
         if (xhr.status === 400) {
           if (xhr.responseText === "EXIST_NAME") {
             alert("해당 자전거 이름이 이미 존재합니다.");
+          } else if(xhr.responseText == "RENTING"){
+            alert("대여중인 자전거는 수정 불가합니다.");
+          } else if(xhr.responseText == "REPORT"){
+            alert("신고된 자전거 입니다. 신고 페이지를 가서 수정을 해주세요.")
           }
-        } else {
+        } else{
           alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
         }
       }

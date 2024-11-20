@@ -11,7 +11,6 @@ $(document).ready(function () {
     e.preventDefault();
     var branchName = $("input[name='branchName']").val().trim();
     var streetAdr = $("#streetAdr").val().trim();
-
     // 입력값 확인
     if (!branchName || !streetAdr) {
       alert("모든 정보를 입력해주세요.");
