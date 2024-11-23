@@ -63,12 +63,17 @@ $(document).ready(function () {
   // Handle form submission
   $("#submitBtn").on("click", function (e) {
     e.preventDefault();
-    const bicycleName = $("input[name='bicycleName']").val().trim();
+    let bicycleName = $("input[name='bicycleName']").val().trim();
     const bicycleStatus = $("input[name='bicycleStatus']:checked").val();
     const selectedBranchId = $("#branchSelect").val();
-
+    bicycleName = bicycleName.replaceAll(" ","");
     if (!bicycleName) {
       alert("모든 정보를 입력해주세요.");
+      return;
+    }
+    var validRegex = /^[a-z0-9\-]+$/;
+    if (!validRegex.test(bicycleName)) {
+      alert("자전거 이름은 영어 소문자, 숫자, 하이픈(-)만 입력 가능합니다.");
       return;
     }
 

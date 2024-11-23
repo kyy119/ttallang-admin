@@ -114,7 +114,7 @@
       <input type="password" id="password" name="password" class="form-control" required>
     </div>
     <button type="submit" class="btn btn-primary">로그인</button>
-    <a href="${pageContext.request.contextPath}/signup/form" type="button" class="btn btn-primary">회원가입</a>
+<%--    <a href="${pageContext.request.contextPath}/signup/form" type="button" class="btn btn-primary">회원가입</a>--%>
   </form>
 </div>
 

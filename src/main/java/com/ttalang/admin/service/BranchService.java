@@ -58,17 +58,13 @@ public class BranchService {
         }
         Branch branch = branchRepository.findById(branchId)
             .orElseThrow(() -> new IllegalArgumentException("Branch not found"));
-
         String apiUrl = "https://dapi.kakao.com/v2/local/search/address.json?query=" + streetAdr;
-
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "KakaoAK " + KAKAO_API_KEY);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
         ResponseEntity<KakaoApiResponse> response = restTemplate.exchange(apiUrl, HttpMethod.GET,
             entity, KakaoApiResponse.class);
-
         double latitude = response.getBody().getDocuments().get(0).getY();
         double longitude = response.getBody().getDocuments().get(0).getX();
 
