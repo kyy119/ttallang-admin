@@ -40,7 +40,11 @@ $(document).ready(function () {
       alert("모든 정보를 입력해주세요.");
       return;
     }
-
+    var koreanRegex = /^[가-힣\s]+$/;
+    if (!koreanRegex.test(branchName)) {
+      alert("지점명에는 한글만 입력 가능합니다.");
+      return;
+    }
     // Ajax 요청을 통해 중복 체크 및 추가
     $.ajax({
       type: "POST",
